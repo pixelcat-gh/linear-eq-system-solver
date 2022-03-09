@@ -5,6 +5,12 @@ public class Results {
     private final int size;
     private final double[] table;
 
+    public static Results returnInvalid() {
+        Results res = new Results(1);
+        res.setAt(0, Double.NaN);
+        return res;
+    }
+
     public Results(int size) {
         this.size = size;
         table = new double[size];
@@ -17,11 +23,8 @@ public class Results {
     }
 
     public void print() {
-        if (!isValid()) {
-            System.out.println("No solution found.");
-            return;
-        }
-        for (int i = 0; i < size; i++)
+        if (!isValid()) System.out.println("No solution found.");
+        else for (int i = 0; i < size; i++)
             System.out.format("x" + (i+1) + " = %15.4f%n", table[i]);
     }
 

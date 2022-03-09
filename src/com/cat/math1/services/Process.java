@@ -1,6 +1,8 @@
 package com.cat.math1.services;
 
 import com.cat.math1.entities.Matrix;
+import com.cat.math1.exceptions.IncorrectSizeException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
@@ -117,7 +119,7 @@ public class Process {
         calculate(m);
     }
 
-    private void calculate(Matrix m) {
+    private void calculate(@NotNull Matrix m) {
         System.out.println("The matrix you inputted is:");
         m.print();
 
@@ -186,7 +188,7 @@ public class Process {
         return readFromScanner(new Scanner(System.in));
     }
 
-    private String readFromScanner(Scanner scanner) {
+    private String readFromScanner(@NotNull Scanner scanner) {
         try { return scanner.nextLine(); }
         catch (NoSuchElementException e) { return "q"; }
     }

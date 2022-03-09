@@ -1,6 +1,7 @@
 package com.cat.math1.services;
 
 import com.cat.math1.entities.Matrix;
+import com.cat.math1.exceptions.IncorrectSizeException;
 
 import java.io.File;
 import java.io.FileNotFoundException;

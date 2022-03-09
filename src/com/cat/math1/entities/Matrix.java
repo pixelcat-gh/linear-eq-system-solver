@@ -1,5 +1,7 @@
 package com.cat.math1.entities;
 
+import com.cat.math1.exceptions.UnableToModifyMatrixException;
+
 import java.util.Random;
 
 public class Matrix {
@@ -37,7 +39,12 @@ public class Matrix {
     public Results calcRes() {
         System.out.println("Checking if the main diagonal has zeroes on it...");
 
-        if (hasZeroesOnMainDiagonal()) modify();
+        if (hasZeroesOnMainDiagonal())
+            try { modify(); }
+            catch (UnableToModifyMatrixException e) {
+                System.out.println("There is a column that's all zeroes.");
+                return Results.returnInvalid();
+            }
         else System.out.println("Zeroes not found, proceeding...");
 
         System.out.println("Triangulating the matrix...");
@@ -50,7 +57,7 @@ public class Matrix {
             for (int ii = size - 1; ii > i; ii--)
                 subValue += table[i][ii] * res.getAt(ii);
 
-            System.out.println("Processing... " + ((size - i)*100)/size + "%");
+            //System.out.println("Processing... " + ((size - i)*100)/size + "%");
             res.setAt(i, table[i][size] - subValue);
         }
         return res;
@@ -68,15 +75,14 @@ public class Matrix {
     }
 
     private void addRows(int destination, int source) {
-        if (source == -1) return;
         for (int i = 0; i < size+1; i++)
             table[destination][i] = table[destination][i] + table[source][i];
     }
 
-    private int findRowWithNoZeroInPlaceAtIndex(int index) {
-        for (int i = 0; i < size+1; i++)
+    private int findRowWithNoZeroInPlaceAtIndex(int index) throws UnableToModifyMatrixException {
+        for (int i = 0; i < size; i++)
             if (table[i][index] != 0) return i;
-        return -1;
+        throw new UnableToModifyMatrixException();
     }
 
     private void cascadingSubtraction(int row) {
@@ -86,7 +92,7 @@ public class Matrix {
 
     private void triangulate() {
         for (int i = 0; i < size; i++) {
-            System.out.println("Processing... " + (i*100)/size + "%");
+            //System.out.println("Processing... " + (i*100)/size + "%");
             normalizeRow(i);
             cascadingSubtraction(i);
         }
@@ -98,7 +104,7 @@ public class Matrix {
         return false;
     }
 
-    private void modify() {
+    private void modify() throws UnableToModifyMatrixException {
         System.out.println("Zeroes found, attempting to modify the matrix...");
 
         for (int i = 0; i < size; i++)
