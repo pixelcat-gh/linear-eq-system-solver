@@ -1,6 +1,7 @@
 package com.cat.math1.services;
 
 import com.cat.math1.entities.Matrix;
+import com.cat.math1.entities.Results;
 import com.cat.math1.exceptions.IncorrectSizeException;
 import org.jetbrains.annotations.NotNull;
 
@@ -120,10 +121,21 @@ public class Process {
     }
 
     private void calculate(@NotNull Matrix m) {
-        System.out.println("The matrix you inputted is:");
+        System.out.println("The matrix is:");
         m.print();
 
-        if (confirm()) m.calcRes().print();
+        if (confirm()) {
+            Matrix dup = m.returnDuplicate();
+
+            Results res = m.calcRes();
+            System.out.println("The results are:");
+            res.print();
+
+            if (res.isValid()) {
+                System.out.println("The residual error is:");
+                dup.calcErr(res).print();
+            }
+        }
         printLine();
     }
 
@@ -134,11 +146,7 @@ public class Process {
         System.out.println("Generating random matrix...");
         m.fillRandom();
 
-        System.out.println("The generated matrix is:");
-        m.print();
-
-        if (confirm()) m.calcRes().print();
-        printLine();
+        calculate(m);
     }
 
     private int inputSize() {

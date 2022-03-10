@@ -57,10 +57,30 @@ public class Matrix {
             for (int ii = size - 1; ii > i; ii--)
                 subValue += table[i][ii] * res.getAt(ii);
 
-            //System.out.println("Processing... " + ((size - i)*100)/size + "%");
             res.setAt(i, table[i][size] - subValue);
         }
         return res;
+    }
+
+    public Results calcErr(Results n) {
+        Results res = new Results(size);
+
+        for (int i = 0; i < size; i++) {
+            double temp = 0;
+            for (int ii = 0; ii < size; ii++)
+                temp += table[i][ii] * n.getAt(ii);
+
+            temp = table[i][size] - temp;
+
+            res.setAt(i, temp);
+        }
+        return res;
+    }
+
+    public Matrix returnDuplicate() {
+        Matrix ret = new Matrix(size);
+        ret.setTable(table);
+        return ret;
     }
 
     private void normalizeRow(int row) {
@@ -92,7 +112,6 @@ public class Matrix {
 
     private void triangulate() {
         for (int i = 0; i < size; i++) {
-            //System.out.println("Processing... " + (i*100)/size + "%");
             normalizeRow(i);
             cascadingSubtraction(i);
         }
